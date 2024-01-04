@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../style1.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+    <%- include("nav")%>
+
+    <div class="content">
+      <div class="text">Login Form</div>
+      <form action="/user/login" method="post">
+        <div class="field">
+          <input type="email" name="email"  placeholder="Enter Your Email"/>
+          <span class="fas fa-user"></span>
+          <label>Email or Phone</label>
+        </div>
+        <div class="field">
+          <input type="password" name="password" placeholder="Enter Your Password"/>
+          <span class="fas fa-lock"></span>
+          <label>Password</label>
+        </div>
+        <div class="forgot-pass">
+          <a href="/user/sendmail">Forgot Password?</a>
+        </div>
+        <button>Sign in</button>
+      </form>
+    </div>
+  </body>
+</html>

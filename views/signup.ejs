@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../style.css" />
+    <link rel="stylesheet" href="../style1.css">
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+  </head>
+  <body>
+  
+    <%- include("nav")%>
+    <div class="content">
+      <div class="text">Signup Form</div>
+      <form action="/user/reg" method="post">
+        <div class="field">
+          <input type="text" name="username"  placeholder="Enter Your username"/>
+          <span class="fas fa-user"></span>
+        </div>
+        <div class="field">
+          <input type="email" name="email"  placeholder="Enter Your email"/>
+          
+          <svg xmlns="http://www.w3.org/2000/svg" class="icons" height="16" width="16" viewBox="0 0 512 512"><path d="M48 64C21.5 64 0 85.5 0 112c0 15.1 7.1 29.3 19.2 38.4L236.8 313.6c11.4 8.5 27 8.5 38.4 0L492.8 150.4c12.1-9.1 19.2-23.3 19.2-38.4c0-26.5-21.5-48-48-48H48zM0 176V384c0 35.3 28.7 64 64 64H448c35.3 0 64-28.7 64-64V176L294.4 339.2c-22.8 17.1-54 17.1-76.8 0L0 176z"/></svg>
+        </div>
+        <div class="field">
+          <input type="password" name="password" placeholder="Enter Your Password"/>
+          <span class="fas fa-lock"></span>
+          <label>Password</label>
+        </div>
+        <button class="mt">Sign Up</button>
+      </form>
+    </div>
+  </body>
+</html>

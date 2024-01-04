@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../style1.css" />
+    <link rel="stylesheet" href="../style.css" />
+  </head>
+  <body>
+    <%- include("nav")%>
+    <div class="content">
+      <form action="/product/pro" method="post">
+        <div class="field">
+          <input type="text" name="title" placeholder="Title" />
+        </div>
+        <div class="field">
+          <input type="text" name="des" placeholder="description" />
+        </div>
+        <div class="field">
+          <input type="src" name="img" placeholder="image" />
+        </div>
+        <div class="field mt">
+          <input type="number" name="price" placeholder="price" />
+        </div>
+        <div class="field mt">
+          <input type="submit" />
+        </div>
+      </form>
+    </div>
+  </body>
+</html>

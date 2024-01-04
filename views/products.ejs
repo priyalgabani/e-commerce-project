@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="../style1.css" />
+    <style>
+      body {
+        background: #dde1e7;
+      }
+      .container {
+        max-width: 1340px;
+        margin: auto;
+      }
+      #box {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 23px;
+      }
+      #box div {
+        background: #dde1e7;
+        border-radius: 10px;
+        box-shadow: -3px -3px 7px #ffffff73,
+          2px 2px 5px rgba(94, 104, 121, 0.288);
+        padding: 15px;
+        margin-bottom: 40px;
+      }
+      #box div img {
+        height: 280px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        display: block;
+        margin: auto;
+      }
+      #box div h1 {
+        font-size: 23px;
+        padding-top: 23px;
+        padding-left: 10px;
+      }
+      #box div h6 {
+        font-size: 17px;
+        padding-top: 11px;
+        padding-left: 10px;
+      }
+      #box div h3 {
+        font-size: 17px;
+        padding-top: 12px;
+        padding-left: 10px;
+      }
+      #box div button {
+        box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+        font-size: 18px;
+        line-height: 50px;
+        font-weight: 600;
+        background: #dde1e7;
+        border-radius: 25px;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        color: #595959;
+        width: 90%;
+        height: 50px;
+        display: block;
+        margin: 26px auto;
+      }
+      #box div button:focus {
+        color: #3498db;
+        box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff73;
+      }
+    </style>
+  </head>
+  <body>
+    <%- include("nav")%>
+    <div class="container">
+      <div id="box"></div>
+    </div>
+
+    <script>
+
+      fetch("/product/products")
+        .then((res) => res.json())
+        .then((data) => {
+          display(data);
+        });
+
+      const display = (data) => {
+        document.getElementById("box").innerHTML = "";
+        data.map((ele) => {
+          console.log(data);
+          let img = document.createElement("img");
+          img.src = ele.img;
+          let title = document.createElement("h1");
+          title.innerHTML = `Title : ${ele.title}`;
+          let des = document.createElement("h6");
+          des.innerHTML = `desc : ${ele.des}`;
+          let price = document.createElement("h3");
+          price.innerHTML = ` Price : ${ele.price}`;
+          let btn1 = document.createElement("button");
+          btn1.innerHTML = "Add To Cart";
+          btn1.addEventListener("click", () => cart(ele._id));
+
+          const cart = (id) => {
+            console.log(id);
+            fetch(`/product/cart/${id}`, {
+              method: "POST",
+              headers: { "Content-type": "application/json " },
+              body: JSON.stringify({ productID: id }),
+            })
+              .then((response) => response.json())
+              .then((data) => console.log(data));
+          };
+
+          let div = document.createElement("div");
+          div.append(img, title, des, price, btn1);
+          document.getElementById("box").append(div);
+        });
+      };
+
+      fetch("/product/all")
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          display(data);
+        });
+    </script>
+  </body>
+</html>

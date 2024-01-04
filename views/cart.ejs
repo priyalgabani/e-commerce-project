@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>cart page</title>
+    <link rel="stylesheet" href="../style1.css" />
+    <style>
+      #box div {
+        display: flex;
+        flex-direction: row;
+        margin-bottom: 50px;
+        border-top: 3px solid #e1e8ee;
+        padding: 45px;
+        box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff73;
+      }
+      .container {
+        max-width: 1240px;
+        margin: auto;
+      }
+
+      #box div img {
+        height: 170px;
+        padding-right: 125px;
+      }
+      #box div h2 {
+        width: 17%;
+        padding-left: 20px;
+        padding-top: 70px;
+        font-size: 23px;
+      }
+      #box div h1 {
+        width: 20%;
+        padding-top: 62px;
+        font-size: 29px;
+      }
+      #box div h3 {
+        width: 14%;
+        padding-top: 68px;
+        font-size: 22px;
+      }
+      #box div button {
+        width: 45px;
+        height: 40px;
+        background-color: #e1e8ee;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        font-size: 21px;
+        margin-top: 63px;
+      }
+      #box div h4 {
+        text-align: center;
+        margin-top: 71px;
+        font-size: 19px;
+      }
+      #plus {
+        margin-right: 125px;
+        margin-left: 25px;
+      }
+      #btn {
+        margin-right: 25px;
+        font-size: 27px !important;
+        padding-bottom: 5px;
+      }
+      .title {
+        margin: 50px 0px 50px 0px;
+      }
+      #box h5 {
+        font-size: 30px;
+        text-align: end;
+        padding-right: 90px;
+        letter-spacing: 1.3px;
+        border-top: 2px solid #ccc;
+        padding-top: 60px;
+        border-width: 100%;
+      }
+      #box #payment {
+        display: block;
+        margin-left: 920px;
+        margin-top: 48px;
+        padding: 17px 65px;
+        border-radius: 3px;
+        border: none;
+        font-size: 20px;
+        letter-spacing: 1px;
+        margin-bottom: 40px;
+        box-shadow: 2px 2px 5px #babecc, -5px -5px 10px #ffffff73;
+      }
+      #box #payment:focus {
+        color: #3498db;
+        box-shadow: inset 2px 2px 5px #babecc, inset -5px -5px 10px #ffffff73;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <%- include("nav")%>
+    <div class="container">
+      <h1 class="title">Shopping Bag</h1>
+      <div id="box"></div>
+    </div>
+  </body>
+  <script>
+    const handleqty = (id, val) => {
+      fetch(`/product/cart/update/${id}`, {
+        method: "PATCH",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ val: val }),
+      })
+        .then((response) => response.json())
+        .then((response) => window.location.reload())
+        .catch((error) => console.log(error));
+    };
+
+    const handlepayment = async (amount) => {
+      let res = await fetch(`/product/payment`, {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ amount: amount }),
+      });
+      let order = await res.json();
+      console.log(order);
+
+      let options = {
+        key: "rzp_test_h2I8c2W1XyV2pF",
+        amount: order.amount,
+      };
+      let rpay = new Razorpay(options);
+      rpay.open();
+    };
+
+   
+
+    let tprice = 0;
+    const display = (data) => {
+      document.getElementById("box").innerHTML = "";
+      data.map((element) => {
+        let ele = element.productID
+        tprice = Number(tprice) + Number(ele.price) * element.qty
+        let img = document.createElement("img");
+        img.src = ele.img;
+        let title = document.createElement("h1");
+        title.innerHTML = ele.title;
+        let price = document.createElement("h3");
+        price.innerHTML = ele.price;
+        let btn1 = document.createElement("button");
+        btn1.setAttribute("id", "btn");
+        btn1.innerHTML = "-";
+        btn1.addEventListener("click", () => handleqty(element._id, -1));
+        let qty = document.createElement("h4");
+        qty.innerHTML = element.qty;
+        let btn2 = document.createElement("button");
+        btn2.setAttribute("id", "plus");
+        btn2.innerHTML = "+";
+        btn2.addEventListener("click", () => handleqty(element._id, 1));
+        let btn3 = document.createElement("h2");
+        btn3.innerHTML = "X";
+
+        let div = document.createElement("div");
+        div.append(btn3, img, title, btn1, qty, btn2, price);
+        document.getElementById("box").append(div);
+      });
+
+      let pricebtn = document.createElement("h5");
+      pricebtn.innerHTML = `Total price : ${tprice}`;
+      let paymentbtn = document.createElement("button");
+      paymentbtn.setAttribute("id", "payment");
+      paymentbtn.innerHTML = "Checkout";
+      paymentbtn.addEventListener("click", async () => {
+        handlepayment(tprice);
+      });
+
+      document.getElementById("box").append(pricebtn, paymentbtn);
+    };
+
+    function get() {
+      fetch("/product/cartdata")
+        .then((response) => response.json())
+        .then((data) => display(data))
+        .then((error) => console.log(error));
+    }
+
+    get();
+  </script>
+</html>
